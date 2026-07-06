@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private MakingMovingBlock _makingMovingBlock;
 	[SerializeField]
+	private CameraMove _cameraMove;
+	[SerializeField]
 	private GameObject _fallingBlock;
 	[SerializeField]
 	private GameObject _notFallingBlock;
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
 			GameOver();
 			return;
 		}
+		
 		SliceCube();
 		_isXaxis = !_isXaxis;
 		Upper();
@@ -55,6 +58,7 @@ public class GameManager : MonoBehaviour
 	private void Upper()
 	{
 		_blockCenter.y += _blockSize.y;
+		_cameraMove.MoveUp(_blockSize.y);
 	}
 
 	private void SliceCube()
