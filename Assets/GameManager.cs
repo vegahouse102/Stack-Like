@@ -1,7 +1,5 @@
-using System;
-using TMPro.EditorUtilities;
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +9,8 @@ public class GameManager : MonoBehaviour
 	private  Vector3 _blockSize;
 	[SerializeField]
 	private  bool _isXaxis;
+	[SerializeField]
+	private float _placementThreshold;
 	[SerializeField]
 	private MakingMovingBlock _makingMovingBlock;
 	[SerializeField]
@@ -47,12 +47,27 @@ public class GameManager : MonoBehaviour
 			GameOver();
 			return;
 		}
-		
-		SliceCube();
+		if (IsPerfectPlace())
+		{
+			GameObject notFallingBlock = _makingMovingBlock.CreateCube(_notFallingBlock, _blockCenter, _blockSize);
+			Debug.Log("perfectFit");
+		}
+		else
+		{
+
+			SliceCube();
+		}
 		_isXaxis = !_isXaxis;
 		Upper();
 		MakingMovingBlock();
 		
+	}
+
+	private bool IsPerfectPlace()
+	{
+		if (_curBlock == null)
+			return false;
+		return Vector3.Distance(_curBlock.transform.position,_blockCenter)<_placementThreshold;
 	}
 
 	private void Upper()
@@ -64,7 +79,6 @@ public class GameManager : MonoBehaviour
 	private void SliceCube()
 	{
 		Vector3 blockPos = _curBlock.gameObject.transform.position;
-		GameObject.Destroy(_curBlock.gameObject);
 		Vector3 vremovePos;
 		Vector3 vremoveSize;
 		Vector3 vremainPos;
@@ -158,6 +172,8 @@ public class GameManager : MonoBehaviour
 
 	public void MakingMovingBlock()
 	{ 
+		if(_curBlock!=null)
+			GameObject.Destroy(_curBlock.gameObject);
 		_curBlock = _makingMovingBlock.CreateMovingBlock(_startPos,_startSize,_blockCenter,_blockSize,_isXaxis) ;
 	}
 	

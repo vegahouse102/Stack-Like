@@ -152,6 +152,7 @@ MonoBehaviour:
   _blockCenter: {x: 0, y: -1.75, z: 0}
   _blockSize: {x: 6, y: 1, z: 6}
   _isXaxis: 0
+  _placementThreshold: 0.1
   _makingMovingBlock: {fileID: 98799944}
   _cameraMove: {fileID: 330585548}
   _fallingBlock: {fileID: 3216908681005378992, guid: 9ca80d4913a38b1459cdf4776b879643, type: 3}
@@ -272,13 +273,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.08717229, y: 0.8995905, z: -0.21045253, w: -0.37262273}
-  m_LocalPosition: {x: 19.99, y: 13.02, z: 19.99}
+  m_LocalRotation: {x: -0.15764953, y: 0.8418416, z: -0.3805996, w: -0.34870237}
+  m_LocalPosition: {x: 19.99, y: 30.77, z: 19.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 48.656, y: -135, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
