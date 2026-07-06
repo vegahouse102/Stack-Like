@@ -6,26 +6,24 @@ public class MakingMovingBlock : MonoBehaviour
 	private GameObject _movingCube;
 	[SerializeField]
 	private float _moveVelocity;
-	public MovingBlock CreateMovingBlock(Vector3 blockCenter,Vector3 scale,bool isXaxis)
+
+	public MovingBlock CreateMovingBlock(Vector3 _startBlockPos, Vector3 _StartBlockScale,Vector3 blockCenter,Vector3 scale,bool isXaxis)
 	{
-		Vector3 blockPos = blockCenter;
 		float moveDistance;
-		int dir = 1;
+		Vector3 startPos = blockCenter;
 		if (isXaxis)
 		{
-			blockPos.x -= scale.x+ scale.x/2;
-			moveDistance = 3*scale.x;
-
+			startPos.x = _startBlockPos.x - _StartBlockScale.x- _StartBlockScale.x/2;
+			moveDistance = 3 * _StartBlockScale.x;
 		}
 		else
 		{
-			blockPos.z -= scale.z+ scale.z/2;
-			moveDistance = 3 * scale.z;
-
+			startPos.z = _startBlockPos.z  - _StartBlockScale.z - _StartBlockScale.z / 2;
+			moveDistance = 3 * _StartBlockScale.z;
 		}
-		GameObject Cube = CreateCube(_movingCube,blockPos, scale);
+		GameObject Cube = CreateCube(_movingCube,startPos, scale);
 		MovingBlock block = Cube.GetComponent<MovingBlock>();
-		block.Initialized(isXaxis,_moveVelocity,moveDistance,dir);
+		block.Initialized(isXaxis,_moveVelocity,moveDistance,1);
 		return block;
 	}
 	public GameObject CreateCube(GameObject cube,Vector3 blockCenter, Vector3 scale)

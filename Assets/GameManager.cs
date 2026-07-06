@@ -1,6 +1,7 @@
 using System;
 using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,10 +18,16 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private GameObject _notFallingBlock;
 	private MovingBlock _curBlock;
-
+	private Vector3 _startSize;
+	private Vector3 _startPos;
 
 	private bool isGameStart;
 	private bool isFinish = false;
+	private void Awake()
+	{
+		_startSize = _blockSize;
+		_startPos = _blockCenter;
+	}
 	public void ClickHandler()
 	{
 		if (isFinish)
@@ -146,8 +153,8 @@ public class GameManager : MonoBehaviour
 	}
 
 	public void MakingMovingBlock()
-	{
-		_curBlock = _makingMovingBlock.CreateMovingBlock(_blockCenter,_blockSize,_isXaxis) ;
+	{ 
+		_curBlock = _makingMovingBlock.CreateMovingBlock(_startPos,_startSize,_blockCenter,_blockSize,_isXaxis) ;
 	}
 	
 }
