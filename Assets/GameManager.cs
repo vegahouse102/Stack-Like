@@ -39,8 +39,10 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 		SliceCube();
+		_isXaxis = !_isXaxis;
 		Upper();
 		MakingMovingBlock();
+		
 	}
 
 	private void Upper()
@@ -74,8 +76,8 @@ public class GameManager : MonoBehaviour
 		}
 		GameObject fallingBlock = _makingMovingBlock.CreateCube(_fallingBlock,vremovePos,vremoveSize);
 		GameObject notFallingBlock = _makingMovingBlock.CreateCube(_notFallingBlock, vremainPos, vremainSize);
-		//_blockCenter = vremainPos;
-		//_blockSize = vremainPos;
+		_blockCenter = vremainPos;
+		_blockSize = vremainSize;
 	}
 	private (float deletedpos,float deletesize,float remainpos,float remainsize) GetSlicedCube(float movingpos,float basepos,float size)
 	{
@@ -146,7 +148,6 @@ public class GameManager : MonoBehaviour
 	public void MakingMovingBlock()
 	{
 		_curBlock = _makingMovingBlock.CreateMovingBlock(_blockCenter,_blockSize,_isXaxis) ;
-		_isXaxis = !_isXaxis;
 	}
 	
 }

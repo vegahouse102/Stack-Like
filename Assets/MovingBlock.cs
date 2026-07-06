@@ -10,6 +10,9 @@ public class MovingBlock : MonoBehaviour
 	private float _moveDistance;
 	private float _moveVelocity;
 	private Vector3 _startPos;
+	private Vector3 _farPos;
+	private bool _isTargetStart;
+	private Vector3 _target;
 	private void Awake()
 	{
 		_startPos = transform.position;
@@ -20,6 +23,19 @@ public class MovingBlock : MonoBehaviour
 		_moveVelocity = moveVelocity ;
 		_isXaxis = isXaxis;
 		_dir = dir;
+		_farPos = _startPos;
+		if (_isXaxis)
+		{
+			_farPos.x += moveDistance;
+
+		}
+		else
+		{
+			_farPos.z += moveDistance;
+		}
+
+		_isTargetStart = false;
+		_target = _farPos;
 	}
 	private void Update()
 	{
@@ -28,6 +44,15 @@ public class MovingBlock : MonoBehaviour
 		if (ShouldTurn())
 		{
 			_dir = (_dir == 1) ? -1 : 1;
+			if (_isTargetStart)
+			{
+				_target = _farPos;
+			}
+			else
+			{
+				_target = _startPos;
+			}
+			_isTargetStart = !_isTargetStart;
 		}
 		if (_isXaxis)
 		{
@@ -41,24 +66,17 @@ public class MovingBlock : MonoBehaviour
 
 	private bool ShouldTurn()
 	{
-		float curDistance = Vector3.Distance(transform.position, _startPos);
-		if (curDistance>_moveDistance)
+		float curDistance = Vector3.Distance(transform.position, _target);
+		Vector3 other = transform.position;
+		if (_isXaxis)
 		{
-			Vector3 other = transform.position;
-			if (_isXaxis)
-			{
-				other.x += _dir;
-			}
-			else
-			{
-				other.z+= _dir;
-			}
-			return Vector3.Distance(other, _startPos) > curDistance;
-			
-
-			
+			other.x += _dir;
 		}
-		return false;
+		else
+		{
+			other.z += _dir;
+		}
+		return Vector3.Distance(other, _target) > curDistance;
 	}
 
 	public void Stop()

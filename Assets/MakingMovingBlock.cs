@@ -3,7 +3,7 @@ using UnityEngine;
 public class MakingMovingBlock : MonoBehaviour
 {
 	[SerializeField]
-	private GameObject _MovingCube;
+	private GameObject _movingCube;
 	[SerializeField]
 	private float _moveVelocity;
 	public MovingBlock CreateMovingBlock(Vector3 blockCenter,Vector3 scale,bool isXaxis)
@@ -13,17 +13,17 @@ public class MakingMovingBlock : MonoBehaviour
 		int dir = 1;
 		if (isXaxis)
 		{
-			blockPos.x -= scale.x;
-			moveDistance = 2*scale.x;
+			blockPos.x -= scale.x+ scale.x/2;
+			moveDistance = 3*scale.x;
 
 		}
 		else
 		{
-			blockPos.z -= scale.z;
-			moveDistance = 2 * scale.z;
+			blockPos.z -= scale.z+ scale.z/2;
+			moveDistance = 3 * scale.z;
 
 		}
-		GameObject Cube = CreateCube(_MovingCube,blockPos, scale);
+		GameObject Cube = CreateCube(_movingCube,blockPos, scale);
 		MovingBlock block = Cube.GetComponent<MovingBlock>();
 		block.Initialized(isXaxis,_moveVelocity,moveDistance,dir);
 		return block;
