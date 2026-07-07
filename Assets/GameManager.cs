@@ -36,15 +36,18 @@ public class GameManager : MonoBehaviour
 		_startSize = _blockSize;
 		_startPos = _blockCenter;
 	}
+	public void GameStart()
+	{
+		isGameStart = true;
+		OnGameStart?.Invoke();
+		MakingMovingBlock();
+	}
 	public void ClickHandler()
 	{
 		if (isFinish)
 			return;
 		if (!isGameStart)
 		{
-			isGameStart = true;
-			OnGameStart?.Invoke();
-			MakingMovingBlock();
 			return;
 		}
 		_curBlock.Stop();
@@ -55,7 +58,7 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 
-		OnBlockPlace?.Invoke();
+
 		if (IsPerfectPlace())
 		{
 			GameObject notFallingBlock = _makingMovingBlock.CreateCube(_notFallingBlock, _blockCenter, _blockSize);
@@ -66,6 +69,7 @@ public class GameManager : MonoBehaviour
 
 			SliceCube();
 		}
+		OnBlockPlace?.Invoke();
 		_isXaxis = !_isXaxis;
 		Upper();
 		MakingMovingBlock();

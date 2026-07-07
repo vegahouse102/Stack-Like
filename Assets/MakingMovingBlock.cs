@@ -6,6 +6,8 @@ public class MakingMovingBlock : MonoBehaviour
 	private GameObject _movingCube;
 	[SerializeField]
 	private float _moveVelocity;
+	[SerializeField]
+	private BlockColor _blockColor;
 
 	public MovingBlock CreateMovingBlock(Vector3 _startBlockPos, Vector3 _StartBlockScale,Vector3 blockCenter,Vector3 scale,bool isXaxis)
 	{
@@ -29,6 +31,8 @@ public class MakingMovingBlock : MonoBehaviour
 	public GameObject CreateCube(GameObject cube,Vector3 blockCenter, Vector3 scale)
 	{
 		GameObject Cube = Instantiate(cube, blockCenter, Quaternion.identity);
+		Renderer renderer = Cube.GetComponent<Renderer>();
+		renderer.material.color = _blockColor.GetColor();
 		Cube.transform.localScale = scale;
 		return Cube;
 	}

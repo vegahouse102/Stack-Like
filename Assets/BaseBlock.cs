@@ -2,6 +2,8 @@ using UnityEngine;
 using DG.Tweening;
 public class BaseBlock : MonoBehaviour
 {
+	[SerializeField]
+	private BlockColor _color;
 	private Vector3 _originalPos;
 
 	void Awake()
@@ -9,6 +11,11 @@ public class BaseBlock : MonoBehaviour
 		_originalPos = transform.position;
 		transform.position -= Vector3.up * 50;
 		
+	}
+	private void Start()
+	{
+		Renderer renderer = GetComponent<Renderer>();
+		renderer.material.color = _color.GetColor();
 	}
 
 	public Tween Getup()
