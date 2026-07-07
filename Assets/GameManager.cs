@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 
 public class GameManager : MonoBehaviour
@@ -25,6 +26,11 @@ public class GameManager : MonoBehaviour
 
 	private bool isGameStart;
 	private bool isFinish = false;
+
+	public UnityEvent OnGameOver;
+	public UnityEvent OnGameStart;
+	public UnityEvent OnBlockPlace;
+
 	private void Awake()
 	{
 		_startSize = _blockSize;
@@ -37,6 +43,7 @@ public class GameManager : MonoBehaviour
 		if (!isGameStart)
 		{
 			isGameStart = true;
+			OnGameStart?.Invoke();
 			MakingMovingBlock();
 			return;
 		}
@@ -47,6 +54,8 @@ public class GameManager : MonoBehaviour
 			GameOver();
 			return;
 		}
+
+		OnBlockPlace?.Invoke();
 		if (IsPerfectPlace())
 		{
 			GameObject notFallingBlock = _makingMovingBlock.CreateCube(_notFallingBlock, _blockCenter, _blockSize);
@@ -75,7 +84,7 @@ public class GameManager : MonoBehaviour
 		_blockCenter.y += _blockSize.y;
 		_cameraMove.MoveUp(_blockSize.y);
 	}
-
+	#region calcSliceCube
 	private void SliceCube()
 	{
 		Vector3 blockPos = _curBlock.gameObject.transform.position;
@@ -139,12 +148,6 @@ public class GameManager : MonoBehaviour
 		}
 		return (deletedPos,deleteSize,remainPos,remainSize);
 	}
-	private void GameOver()
-	{
-		isFinish = true;
-		Debug.Log("GameOver");
-	}
-
 	private bool IsAABB()
 	{
 		Vector3 movingBlockPos = _curBlock.gameObject.transform.position;
@@ -169,6 +172,15 @@ public class GameManager : MonoBehaviour
 			return false;
 		return true;
 	}
+	#endregion
+	private void GameOver()
+	{
+		isFinish = true;
+		GameObject FallingBlock = _makingMovingBlock.CreateCube(_fallingBlock, _curBlock.gameObject.transform.position, _blockSize);
+		GameObject.Destroy(_curBlock.gameObject);
+		OnGameOver?.Invoke();
+	}
+
 
 	public void MakingMovingBlock()
 	{ 
