@@ -6,6 +6,8 @@ public class BaseBlock : MonoBehaviour
 	private BlockColor _color;
 	[SerializeField]
 	private Renderer _baseBaseRenderer;
+	[SerializeField]
+	private float _UpMoveTime = 0.5f;
 	private Vector3 _originalPos;
 
 	void Awake()
@@ -23,6 +25,6 @@ public class BaseBlock : MonoBehaviour
 
 	public Tween Getup()
 	{
-		return transform.DOMoveY(_originalPos.y, 0.5f).SetEase(Ease.OutCubic);
+		return transform.DOMoveY(_originalPos.y, _UpMoveTime).SetEase(Ease.OutCirc);
 	}
 }
