@@ -4,6 +4,8 @@ public class BaseBlock : MonoBehaviour
 {
 	[SerializeField]
 	private BlockColor _color;
+	[SerializeField]
+	private Renderer _baseBaseRenderer;
 	private Vector3 _originalPos;
 
 	void Awake()
@@ -16,6 +18,7 @@ public class BaseBlock : MonoBehaviour
 	{
 		Renderer renderer = GetComponent<Renderer>();
 		renderer.material.color = _color.GetColor();
+		_baseBaseRenderer.material.SetColor("_TopColor", _color.GetColor());
 	}
 
 	public Tween Getup()
