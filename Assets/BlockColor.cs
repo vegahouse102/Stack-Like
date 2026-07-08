@@ -6,6 +6,12 @@ public class BlockColor : MonoBehaviour
 	[SerializeField]
 	[Range(0,1f)]
 	private float _changeColorSpeed = 0.03f;
+	[SerializeField]
+	[Range(0, 1f)]
+	private float _s = 0.6f;
+	[SerializeField]
+	[Range(0, 1f)]
+	private float _v = 0.95f;
 	private float _hue;
 	
 	private void Awake()
@@ -15,7 +21,7 @@ public class BlockColor : MonoBehaviour
 
 	public Color GetColor()
 	{
-		return Color.HSVToRGB(_hue,0.6f,0.95f);
+		return Color.HSVToRGB(_hue,_s,_v);
 	}
 	public void NextColor()
 	{
