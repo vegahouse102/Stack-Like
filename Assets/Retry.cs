@@ -13,6 +13,7 @@ public class Retry : MonoBehaviour
 	public void RetryHandler()
 	{
 		_asyncOperation.allowSceneActivation = true;
+		//SceneManager.LoadScene("SampleScene");
 	}
 }
 

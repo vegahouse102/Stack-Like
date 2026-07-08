@@ -478,6 +478,7 @@ MonoBehaviour:
   _BackgroundColor: {fileID: 119946040}
   _render: {fileID: 119946038}
   _time: 5
+  _camera: {fileID: 330585545}
 --- !u!1 &314059155
 GameObject:
   m_ObjectHideFlags: 0

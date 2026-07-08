@@ -9,9 +9,18 @@ public class BackGround : MonoBehaviour
 	Renderer _render;
 	[SerializeField]
 	private float _time;
+	[SerializeField]
+	Camera _camera;
 
 	private Tween _top,_bottom;
-	
+	private void Awake()
+	{
+		transform.rotation = _camera.transform.rotation;
+		transform.position = _camera.transform.position+_camera.transform.forward*200;
+		float height = 2*_camera.orthographicSize;
+		float width = height * _camera.aspect;
+		transform.localScale = new Vector3(width, height, 1);
+	}
 	void Start()
 	{
 		_render.material.SetColor("_BottomColor", Color.black);
