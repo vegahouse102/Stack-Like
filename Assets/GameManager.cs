@@ -81,8 +81,8 @@ public class GameManager : MonoBehaviour
 				GameObject.Destroy(_curBlock.gameObject);
 				ExpandBlock expand = notFallingBlock.GetComponent<ExpandBlock>();
 				expand.OnExpandEnd += HandleExpandBlockEnd;
-				float curAxisLength = _isXaxis ? notFallingBlock.transform.localScale.x:notFallingBlock.transform.localScale.y;
-				float maxAxisLength = _isXaxis ? _startSize.x : _startSize.y;
+				float curAxisLength = _isXaxis ? notFallingBlock.transform.localScale.x:notFallingBlock.transform.localScale.z;
+				float maxAxisLength = _isXaxis ? _startSize.x : _startSize.z;
 				float expandLength = Mathf.Min(curAxisLength+_expandBlockLength, maxAxisLength)- curAxisLength;
 				if (!Mathf.Approximately(expandLength, 0))
 				{
