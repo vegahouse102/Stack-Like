@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class BackGround : MonoBehaviour
 {
@@ -11,8 +12,13 @@ public class BackGround : MonoBehaviour
 	private float _time;
 	[SerializeField]
 	Camera _camera;
+	[SerializeField]
+	private ParticleSystem _particleSystem;
+	[SerializeField,Min(0)]
+	int _changeCount;
 
 	private Tween _top,_bottom;
+	private int _curCount;
 	private void Awake()
 	{
 		transform.rotation = _camera.transform.rotation;
@@ -20,6 +26,8 @@ public class BackGround : MonoBehaviour
 		float height = 2*_camera.orthographicSize;
 		float width = height * _camera.aspect;
 		transform.localScale = new Vector3(width, height, 1);
+		var shape = _particleSystem.shape;
+		shape.scale= new Vector3(width, height, 1);
 	}
 	void Start()
 	{
@@ -27,10 +35,22 @@ public class BackGround : MonoBehaviour
 		_render.material.SetColor("_TopColor", Color.black);
 		float tmp = _time;
 		_time = 0.3f;
-		SetBackgroundColor();
+		ChangeColor();
 		_time = tmp;
 	}
 	public void SetBackgroundColor()
+	{
+		_curCount++;
+		if (_curCount != _changeCount)
+		{
+			return;
+		}
+		_curCount = 0;
+
+		ChangeColor();
+	}
+	
+	private void ChangeColor()
 	{
 		Color a = _BackgroundColor.GetColor();
 		_BackgroundColor.NextColor();
@@ -41,8 +61,8 @@ public class BackGround : MonoBehaviour
 		if (_top != null)
 			_top.Kill();
 
-		_bottom =  DOTween.To(
-			()=> _render.material.GetColor("_BottomColor"),
+		_bottom = DOTween.To(
+			() => _render.material.GetColor("_BottomColor"),
 			(Color color) => _render.material.SetColor("_BottomColor", color),
 			a,
 			_time);
@@ -52,5 +72,4 @@ public class BackGround : MonoBehaviour
 			b,
 			_time);
 	}
-	
 }
