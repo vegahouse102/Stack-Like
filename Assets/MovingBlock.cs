@@ -83,5 +83,5 @@ public class MovingBlock : MonoBehaviour
 	{
 		_isStop = true;
 	}
-
+	
 }

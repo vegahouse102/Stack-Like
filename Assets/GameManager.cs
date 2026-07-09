@@ -22,12 +22,16 @@ public class GameManager : MonoBehaviour
 	private GameObject _fallingBlock;
 	[SerializeField]
 	private GameObject _notFallingBlock;
+	[SerializeField]
+	private float _expandBlockLength;
 	private MovingBlock _curBlock;
 	private Vector3 _startSize;
 	private Vector3 _startPos;
 
-	private bool isGameStart;
-	private bool isFinish = false;
+
+	private bool _isGameStart;
+	private bool _isFinish;
+	private bool _isBlockExpand;
 
 	public UnityEvent OnGameOver;
 	public UnityEvent OnGameStart;
@@ -38,20 +42,26 @@ public class GameManager : MonoBehaviour
 		_startSize = _blockSize;
 		_startPos = _blockCenter;
 	}
+	private void OnDestroy()
+	{
+
+	}
 	public void GameStart()
 	{
-		isGameStart = true;
+		_isGameStart = true;
 		OnGameStart?.Invoke();
 		MakingMovingBlock();
 	}
 	public void ClickHandler()
 	{
-		if (isFinish)
+		if (_isFinish)
 			return;
-		if (!isGameStart)
+		if (!_isGameStart)
 		{
 			return;
 		}
+		if (_isBlockExpand)
+			return;
 		_curBlock.Stop();
 		
 		if (!IsAABB())
@@ -60,14 +70,27 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 
-
+		OnBlockPlace?.Invoke();
 		if (IsPerfectPlace())
 		{
 			GameObject notFallingBlock = _makingMovingBlock.CreateCube(_notFallingBlock, _blockCenter, _blockSize);
 			_stackEffect.SetBoundEffect(_blockCenter,_blockSize);
 			if (_stackEffect.IsMaxStack())
 			{
-
+				_isBlockExpand = true;
+				GameObject.Destroy(_curBlock.gameObject);
+				ExpandBlock expand = notFallingBlock.GetComponent<ExpandBlock>();
+				expand.OnExpandEnd += HandleExpandBlockEnd;
+				float curAxisLength = _isXaxis ? notFallingBlock.transform.localScale.x:notFallingBlock.transform.localScale.y;
+				float maxAxisLength = _isXaxis ? _startSize.x : _startSize.y;
+				float expandLength = Mathf.Min(curAxisLength+_expandBlockLength, maxAxisLength)- curAxisLength;
+				if (!Mathf.Approximately(expandLength, 0))
+				{
+					expand.Expand(_isXaxis, expandLength);
+					return;
+				}
+				_isBlockExpand = false;
+				
 			}
 		}
 		else
@@ -76,10 +99,9 @@ public class GameManager : MonoBehaviour
 			SliceCube();
 			_stackEffect.StackInit();
 		}
-		OnBlockPlace?.Invoke();
-		_isXaxis = !_isXaxis;
-		Upper();
-		MakingMovingBlock();
+		
+		
+		EndPlaceBlock();
 		
 	}
 
@@ -186,18 +208,33 @@ public class GameManager : MonoBehaviour
 	#endregion
 	private void GameOver()
 	{
-		isFinish = true;
+		_isFinish = true;
 		GameObject FallingBlock = _makingMovingBlock.CreateCube(_fallingBlock, _curBlock.gameObject.transform.position, _blockSize);
 		GameObject.Destroy(_curBlock.gameObject);
 		OnGameOver?.Invoke();
 	}
+	private void EndPlaceBlock()
+	{
+		_isXaxis = !_isXaxis;
+		Upper();
+		MakingMovingBlock();
+	}
+	private void HandleExpandBlockEnd(GameObject expandObject)
+	{
 
-
+		_blockCenter = expandObject.gameObject.transform.position;
+		_blockSize = expandObject.gameObject.transform.localScale;
+		EndPlaceBlock();
+		_isBlockExpand = false;
+	}
 	public void MakingMovingBlock()
 	{ 
 		if(_curBlock!=null)
 			GameObject.Destroy(_curBlock.gameObject);
 		_curBlock = _makingMovingBlock.CreateMovingBlock(_startPos,_startSize,_blockCenter,_blockSize,_isXaxis) ;
+		ExpandBlock expandBlock = _curBlock.GetComponent<ExpandBlock>();
+		expandBlock.OnExpandEnd += HandleExpandBlockEnd;
 	}
 	
+
 }
