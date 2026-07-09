@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private CameraMove _cameraMove;
 	[SerializeField]
+	private StackEffect _stackEffect;
+	[SerializeField]
 	private GameObject _fallingBlock;
 	[SerializeField]
 	private GameObject _notFallingBlock;
@@ -62,12 +64,17 @@ public class GameManager : MonoBehaviour
 		if (IsPerfectPlace())
 		{
 			GameObject notFallingBlock = _makingMovingBlock.CreateCube(_notFallingBlock, _blockCenter, _blockSize);
-			Debug.Log("perfectFit");
+			_stackEffect.SetBoundEffect(_blockCenter,_blockSize);
+			if (_stackEffect.IsMaxStack())
+			{
+
+			}
 		}
 		else
 		{
 
 			SliceCube();
+			_stackEffect.StackInit();
 		}
 		OnBlockPlace?.Invoke();
 		_isXaxis = !_isXaxis;

@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 98799943}
   - component: {fileID: 98799946}
   - component: {fileID: 98799947}
+  - component: {fileID: 98799948}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -154,9 +155,10 @@ MonoBehaviour:
   _blockCenter: {x: 0, y: -1.75, z: 0}
   _blockSize: {x: 6, y: 1, z: 6}
   _isXaxis: 0
-  _placementThreshold: 0.2
+  _placementThreshold: 0.23
   _makingMovingBlock: {fileID: 98799944}
   _cameraMove: {fileID: 330585548}
+  _stackEffect: {fileID: 98799948}
   _fallingBlock: {fileID: 3216908681005378992, guid: 9ca80d4913a38b1459cdf4776b879643, type: 3}
   _notFallingBlock: {fileID: 8541927456161963028, guid: 5abc19b8d3d5f3148906aff4cca46e18, type: 3}
   OnGameOver:
@@ -334,6 +336,20 @@ MonoBehaviour:
   _changeColorSpeed: 0.03
   _s: 0.6
   _v: 0.95
+--- !u!114 &98799948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98799942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9941e77310cf3642a0a8f0233307ea5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _boundObj: {fileID: 4737411237259137611, guid: 834325a4fe64e284881edfc9cb427f3c, type: 3}
+  d: 1.25
 --- !u!1 &116966634
 GameObject:
   m_ObjectHideFlags: 0
