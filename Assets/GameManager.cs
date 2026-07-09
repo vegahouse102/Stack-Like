@@ -232,8 +232,6 @@ public class GameManager : MonoBehaviour
 		if(_curBlock!=null)
 			GameObject.Destroy(_curBlock.gameObject);
 		_curBlock = _makingMovingBlock.CreateMovingBlock(_startPos,_startSize,_blockCenter,_blockSize,_isXaxis) ;
-		ExpandBlock expandBlock = _curBlock.GetComponent<ExpandBlock>();
-		expandBlock.OnExpandEnd += HandleExpandBlockEnd;
 	}
 	
 
