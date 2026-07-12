@@ -285,7 +285,7 @@ MonoBehaviour:
   _blockCenter: {x: 0, y: -1.75, z: 0}
   _blockSize: {x: 6, y: 1, z: 6}
   _isXaxis: 0
-  _placementThreshold: 2.41
+  _placementThreshold: 0.3
   _expandBlockLength: 0.96
   _makingMovingBlock: {fileID: 98799944}
   _cameraMove: {fileID: 330585548}
@@ -5539,7 +5539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 1
+  m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -6763,7 +6763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4370664253685157111, guid: a65f410a0b1662d4697f53f1de8dc804, type: 3}
       propertyPath: m_Pivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4370664253685157111, guid: a65f410a0b1662d4697f53f1de8dc804, type: 3}
       propertyPath: m_AnchorMax.x
@@ -6823,7 +6823,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4370664253685157111, guid: a65f410a0b1662d4697f53f1de8dc804, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -151.9
+      value: -176.9
       objectReference: {fileID: 0}
     - target: {fileID: 4370664253685157111, guid: a65f410a0b1662d4697f53f1de8dc804, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
