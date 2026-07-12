@@ -7,7 +7,7 @@ public class Counter : MonoBehaviour
 	private TextMeshProUGUI _text;
 	public void Init()
 	{
-		_text.gameObject.SetActive(true);
+		//_text.gameObject.SetActive(true);
 		_curCount = 0;
 		_text.text = "0";
 	}
@@ -15,6 +15,8 @@ public class Counter : MonoBehaviour
 	public void Count()
 	{
 		++_curCount;
+		if(_curCount > 0)
+			_text.gameObject.SetActive(true);
 		_text.text =  _curCount+"";
 	}
 }
