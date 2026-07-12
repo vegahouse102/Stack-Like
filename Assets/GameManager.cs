@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
 	[Header("Events")]
 	public UnityEvent OnGameOver;
 	public UnityEvent OnGameStart;
-	public UnityEvent OnBlockPlace;
+	public UnityEvent<PlaceBlockType> OnBlockPlace;
 
 	private void Awake()
 	{
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
 		else
 		{
 			// 일반 퍼펙트인 경우 즉시 블록 배치 프로세스 종료
-			OnBlockPlace?.Invoke();
+			OnBlockPlace?.Invoke(PlaceBlockType.Perfect);
 			EndPlaceBlock();
 		}
 	}
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 		SliceCube();
 		_stackEffect.StackInit();
 
-		OnBlockPlace?.Invoke();
+		OnBlockPlace?.Invoke(PlaceBlockType.Sliced);
 		EndPlaceBlock();
 	}
 
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
 		{
 			// 이미 최대 크기인 경우 연출 스킵하고 즉시 턴 종료
 			_isBlockExpand = false;
-			OnBlockPlace?.Invoke();
+			OnBlockPlace?.Invoke(PlaceBlockType.Perfect);
 			EndPlaceBlock();
 		}
 	}
@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
 		_blockSize = expandObject.transform.localScale;
 
 		// 연출이 시각적으로 완벽히 끝난 시점에 이벤트를 터트리고 다음 턴 전환
-		OnBlockPlace?.Invoke();
+		OnBlockPlace?.Invoke(PlaceBlockType.Perfect);
 		EndPlaceBlock();
 		_isBlockExpand = false;
 	}
@@ -268,4 +268,10 @@ public class GameManager : MonoBehaviour
 		return true;
 	}
 	#endregion
+}
+public enum PlaceBlockType
+{
+	None,
+	Perfect,
+	Sliced
 }

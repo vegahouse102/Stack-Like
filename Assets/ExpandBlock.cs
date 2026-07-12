@@ -6,6 +6,8 @@ public class ExpandBlock : MonoBehaviour
 {
 	[SerializeField]
 	private float _expandTime;
+	[SerializeField]
+	private AudioSource _audio;
 	public event Action<GameObject> OnExpandEnd;
 	
 	public void Expand(bool isXAxis,float length)
@@ -15,7 +17,7 @@ public class ExpandBlock : MonoBehaviour
 		Vector3 nextPos = originPos; 
 		Vector3 nextSize = originSize;
 
-
+		_audio.Play();
 
 
 
