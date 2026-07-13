@@ -285,7 +285,7 @@ MonoBehaviour:
   _blockCenter: {x: 0, y: -1.75, z: 0}
   _blockSize: {x: 6, y: 1, z: 6}
   _isXaxis: 0
-  _placementThreshold: 2.8
+  _placementThreshold: 0.23
   _maxExpandBlockLength: 0.62
   _makingMovingBlock: {fileID: 98799944}
   _cameraMove: {fileID: 330585548}
