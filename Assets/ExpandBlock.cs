@@ -9,7 +9,7 @@ public class ExpandBlock : MonoBehaviour
 	[SerializeField]
 	private AudioSource _audio;
 	
-	public Sequence Expand(bool isXAxis,float maxLength)
+	public Sequence Expand(bool isXAxis,float length,int dir = 1)
 	{
 		Vector3 originPos = transform.position;
 		Vector3 originSize = transform.localScale;
@@ -22,13 +22,19 @@ public class ExpandBlock : MonoBehaviour
 
 		if (isXAxis)
 		{
-			nextPos.x  = originPos.x - originSize.x / 2 + (maxLength + originSize.x) / 2;
-			nextSize.x += maxLength;
+			if(dir==1)
+				nextPos.x  = originPos.x - originSize.x / 2 + (length + originSize.x) / 2;
+			else
+				nextPos.x = originPos.x + originSize.x / 2 - (length + originSize.x) / 2;
+			nextSize.x += length;
 		}
 		else
 		{
-			nextPos.z = originPos.z - originSize.z / 2 + (maxLength + originSize.z) / 2;
-			nextSize.z += maxLength;
+			if(dir==1)
+				nextPos.z = originPos.z - originSize.z / 2 + (length + originSize.z) / 2;
+			else
+				nextPos.z = originPos.z + originSize.z / 2 - (length + originSize.z) / 2;
+			nextSize.z += length;
 		}
 
 		Tween positionTween = DOTween.To(

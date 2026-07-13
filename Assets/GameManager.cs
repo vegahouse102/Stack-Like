@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,7 +10,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private Vector3 _blockSize;
 	[SerializeField] private bool _isXaxis;
 	[SerializeField] private float _placementThreshold;
-	[SerializeField] private float _expandBlockLength;
+	[SerializeField] private float _maxExpandBlockLength;
 
 	[Header("References")]
 	[SerializeField] private MakingMovingBlock _makingMovingBlock;
@@ -127,18 +128,21 @@ public class GameManager : MonoBehaviour
 		Destroy(_curBlock.gameObject);
 
 		// 현재 확장 축의 크기 및 최대 스케일 한도 계산
-		float curAxisLength = _isXaxis ? targetBlock.transform.localScale.x : targetBlock.transform.localScale.z;
-		float maxAxisLength = _isXaxis ? _startSize.x : _startSize.z;
-		float expandLength = Mathf.Min(curAxisLength + _expandBlockLength, maxAxisLength) - curAxisLength;
+		
 
 
 		Sequence sequence = DOTween.Sequence();
 		// 더 늘어날 공간이 있다면 확장 연출 비동기 콜백 실행
-		if (!Mathf.Approximately(expandLength, 0))
+		if (CanExpandBlock(targetBlock,_isXaxis,1))
 		{
-			
-			sequence.Append( expand.Expand(_isXaxis, expandLength));
+			float expandLength = Mathf.Min(GetDistanceMaxAxis(targetBlock,_isXaxis,1),_maxExpandBlockLength);
+			sequence.Append( expand.Expand(_isXaxis, expandLength,1));
 			sequence.AppendCallback(()=>HandleExpandBlockEnd(expand.gameObject));
+		}else if(CanExpandBlock(targetBlock,  _isXaxis, -1))
+		{
+			float expandLength = Mathf.Min(GetDistanceMaxAxis(targetBlock, _isXaxis, -1), _maxExpandBlockLength);
+			sequence.Append(expand.Expand(_isXaxis, expandLength,-1));
+			sequence.AppendCallback(() => HandleExpandBlockEnd(expand.gameObject));
 		}
 		else
 		{
@@ -152,9 +156,26 @@ public class GameManager : MonoBehaviour
 		return sequence ;
 	}
 
+	private bool CanExpandBlock(GameObject targetBlock, bool isXaxis,int dir)
+	{
+		float distance = GetDistanceMaxAxis(targetBlock, isXaxis, dir);
+		return distance > 0&&!Mathf.Approximately( distance , 0);
+	}
+	private float GetDistanceMaxAxis(GameObject targetBlock,bool isXaxis,int dir)
+	{
+		float curAxisLength = _isXaxis ? targetBlock.transform.localScale.x : targetBlock.transform.localScale.z;
+		float curAxisPos = _isXaxis ? targetBlock.transform.position.x : targetBlock.transform.position.z;
+		float maxAxisLength = _isXaxis ? _startSize.x : _startSize.z;
+		float maxPos = curAxisPos + dir* curAxisLength / 2;
+		if(dir < 0)
+		{
+			return maxPos+ maxAxisLength/2;
+		}
+		return maxAxisLength/2 - maxPos;
+	}
+
 	private void HandleExpandBlockEnd(GameObject expandObject)
 	{
-		// 안전장치: 연출이 완전히 끝났으므로 중복 실행 방지를 위해 이벤트 구독 해제(-=)
 		ExpandBlock expand = expandObject.GetComponent<ExpandBlock>();
 
 		// 확장이 완료된 최종 트랜스폼 데이터로 기준점 갱신

@@ -26,4 +26,9 @@ public class Bound : MonoBehaviour
 	{
 		transform.localScale = new Vector3(scale.x,scale.z,scale.y);
 	}
+	public Sequence ExpandEffect()
+	{
+		Sequence sequence =  DOTween.Sequence();
+		return sequence;
+	}
 }
