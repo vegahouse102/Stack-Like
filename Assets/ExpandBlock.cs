@@ -10,7 +10,7 @@ public class ExpandBlock : MonoBehaviour
 	private AudioSource _audio;
 	public event Action<GameObject> OnExpandEnd;
 	
-	public void Expand(bool isXAxis,float length)
+	public void Expand(bool isXAxis,float maxLength)
 	{
 		Vector3 originPos = transform.position;
 		Vector3 originSize = transform.localScale;
@@ -23,13 +23,13 @@ public class ExpandBlock : MonoBehaviour
 
 		if (isXAxis)
 		{
-			nextPos.x  = originPos.x - originSize.x / 2 + (length + originSize.x) / 2;
-			nextSize.x += length;
+			nextPos.x  = originPos.x - originSize.x / 2 + (maxLength + originSize.x) / 2;
+			nextSize.x += maxLength;
 		}
 		else
 		{
-			nextPos.z = originPos.z - originSize.z / 2 + (length + originSize.z) / 2;
-			nextSize.z += length;
+			nextPos.z = originPos.z - originSize.z / 2 + (maxLength + originSize.z) / 2;
+			nextSize.z += maxLength;
 		}
 
 		Tween positionTween = DOTween.To(
