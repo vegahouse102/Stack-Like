@@ -1,8 +1,6 @@
 using DG.Tweening;
-using System;
-using System.Drawing;
 using UnityEngine;
-
+using Enemy;
 public class StackEffect : MonoBehaviour
 {
 	[SerializeField]
@@ -32,8 +30,9 @@ public class StackEffect : MonoBehaviour
 	{
 		_curStack++;
 		StackSound(_curStack);
-		
-		GameObject boundObj = Instantiate(_boundObj.gameObject);
+
+		GameObject boundObj = PoolManager.Instance.GetObject(_boundObj.gameObject, Vector3.zero);
+		boundObj.transform.rotation = Quaternion.Euler(90,0,0);
 		Bound bound = boundObj.GetComponent<Bound>();
 		Vector3 size = boxScale;
 		Vector3 pos = boxPos;
@@ -63,7 +62,8 @@ public class StackEffect : MonoBehaviour
 	private Sequence SetExpandEffect(Vector3 boxPos, Vector3 boxScale)
 	{
 		Sequence sequence = DOTween.Sequence();
-		GameObject boundObj = Instantiate(_boundObj.gameObject);
+		GameObject boundObj = PoolManager.Instance.GetObject(_boundObj.gameObject, Vector3.zero);
+		boundObj.transform.rotation = Quaternion.Euler(90, 0, 0);
 		Bound bound = boundObj.GetComponent<Bound>();
 		boundObj.SetActive(false);
 		Vector3 size = boxScale;

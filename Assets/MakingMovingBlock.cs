@@ -30,8 +30,9 @@ public class MakingMovingBlock : MonoBehaviour
 	}
 	public GameObject CreateCube(GameObject cube,Vector3 blockCenter, Vector3 scale)
 	{
-		
-		GameObject Cube = Instantiate(cube, blockCenter, Quaternion.identity);
+
+		GameObject Cube = PoolManager.Instance.GetObject(cube,blockCenter);
+			//Instantiate(cube, blockCenter, Quaternion.identity);
 		Renderer renderer = Cube.GetComponent<Renderer>();
 		renderer.material.color = _blockColor.GetColor();
 		Cube.transform.localScale = scale;

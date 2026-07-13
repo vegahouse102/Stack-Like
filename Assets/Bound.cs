@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using Enemy;
 public class Bound : MonoBehaviour
 {
 	[SerializeField]
@@ -9,6 +10,11 @@ public class Bound : MonoBehaviour
 	private void Awake()
 	{
 		
+	}
+	private void OnEnable()
+	{
+		SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+		spriteRenderer.color = Color.white;
 	}
 	public void SetPos(Vector3 pos)
 	{
@@ -32,7 +38,11 @@ public class Bound : MonoBehaviour
 			       , _removeTime
 			).SetEase(Ease.OutSine)
 		);
-		sequence.AppendCallback(() => { GameObject.Destroy(gameObject); });
+		sequence.AppendCallback(() => {
+
+			Release();
+		
+		});
 		return sequence;
 	}
 	public Sequence ExpandEffect()
@@ -48,5 +58,10 @@ public class Bound : MonoBehaviour
 
 		sequence.Join(BasicEffect());
 		return sequence;
+	}
+
+	public void Release()
+	{
+		PoolManager.Instance.ReleaseObject(gameObject);
 	}
 }

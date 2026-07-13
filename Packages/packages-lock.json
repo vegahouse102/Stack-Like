@@ -233,14 +233,14 @@
       "url": "https://packages.unity.com"
     },
     "com.vega.enemy-base-v2": {
-      "version": "https://github.com/vegahouse102/Unity_Enemy_BaseV2.git#4.0.0",
+      "version": "https://github.com/vegahouse102/Unity_Enemy_BaseV2.git#4.0.1",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",
-        "com.unity.behavior": "1.0.15"
+        "com.unity.behavior": "1.0.16"
       },
-      "hash": "9ed94883618258a544c1c38fc587bbfcd8dbaadf"
+      "hash": "3078ea204012ae4fd0d521ba3b6e99baf6b2407c"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
