@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Enemy;
 public class MakingMovingBlock : MonoBehaviour
 {
 	[SerializeField]
@@ -30,6 +30,7 @@ public class MakingMovingBlock : MonoBehaviour
 	}
 	public GameObject CreateCube(GameObject cube,Vector3 blockCenter, Vector3 scale)
 	{
+		
 		GameObject Cube = Instantiate(cube, blockCenter, Quaternion.identity);
 		Renderer renderer = Cube.GetComponent<Renderer>();
 		renderer.material.color = _blockColor.GetColor();
