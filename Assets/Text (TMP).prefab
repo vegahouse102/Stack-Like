@@ -152,3 +152,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   d: {x: 0, y: 0}
   moveTime: 3
+  _textMeshPro: {fileID: 8979190025686747089}
