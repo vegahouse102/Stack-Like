@@ -106,3 +106,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _removeTime: 0.5
+  _expandSize: 2

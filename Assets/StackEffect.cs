@@ -1,4 +1,6 @@
+using DG.Tweening;
 using System;
+using System.Drawing;
 using UnityEngine;
 
 public class StackEffect : MonoBehaviour
@@ -30,16 +32,58 @@ public class StackEffect : MonoBehaviour
 	{
 		_curStack++;
 		StackSound(_curStack);
+		
+		GameObject boundObj = Instantiate(_boundObj.gameObject);
+		Bound bound = boundObj.GetComponent<Bound>();
+		Vector3 size = boxScale;
+		Vector3 pos = boxPos;
+		pos.y -= boxScale.y/2;
+
+		size.x += _diff;
+		size.z += _diff;
+		bound.SetPos(pos);
+		bound.SetSize(size);
+		bound.BasicEffect();
+
+		int stackidx = (_curStack - 1) % 8;
+		if (stackidx > 4)
+		{
+			Sequence sequence = DOTween.Sequence();
+			int effectCount = stackidx - 4;
+			for(int i = 0; i <effectCount; i++)
+			{
+				Sequence expandEffect = DOTween.Sequence();
+				expandEffect.AppendInterval(0.2f*i);
+				expandEffect.Append(SetExpandEffect(boxPos,boxScale));
+				sequence.Join(expandEffect);
+			}
+		}
+		//bound.ExpandEffect();
+	}
+	private Sequence SetExpandEffect(Vector3 boxPos, Vector3 boxScale)
+	{
+		Sequence sequence = DOTween.Sequence();
+		GameObject boundObj = Instantiate(_boundObj.gameObject);
+		Bound bound = boundObj.GetComponent<Bound>();
+		boundObj.SetActive(false);
 		Vector3 size = boxScale;
 		size.x += _diff;
 		size.z += _diff;
-		GameObject boundObj = Instantiate(_boundObj.gameObject);
-		Bound bound = boundObj.GetComponent<Bound>();
-	
+		boxPos.y -= boxScale.y/2;
 		bound.SetPos(boxPos);
 		bound.SetSize(size);
-	}
+		sequence.AppendCallback(() =>
+		{
 
+			boundObj.SetActive(true);
+
+		});
+
+		sequence.Append(bound.ExpandEffect());
+		
+
+		return sequence;
+	}
 	private void StackSound(int stackCount)
 	{
 		int count = stackCount-1;

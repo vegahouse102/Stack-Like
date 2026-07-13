@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
 		GameObject notFallingBlock = _makingMovingBlock.CreateCube(_notFallingBlock, _blockCenter, _blockSize);
 		_stackEffect.SetBoundEffect(_blockCenter, _blockSize);
 
+
 		// 맥스 콤보(스택) 달성 시 블록 확장 연출 페이즈 진입
 		if (_stackEffect.IsMaxStack())
 		{
