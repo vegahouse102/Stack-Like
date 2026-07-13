@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MovingBlock : MonoBehaviour
@@ -7,7 +6,7 @@ public class MovingBlock : MonoBehaviour
 	private bool _isXaxis;
 	private bool _isStop = false;
 	private int _dir = 1;
-	private float _moveDistance;
+	
 	private float _moveVelocity;
 	private Vector3 _startPos;
 	private Vector3 _farPos;
@@ -19,7 +18,6 @@ public class MovingBlock : MonoBehaviour
 	}
 	public void Initialized(bool isXaxis,float moveVelocity, float moveDistance,int dir)
 	{
-		_moveDistance = moveDistance;
 		_moveVelocity = moveVelocity ;
 		_isXaxis = isXaxis;
 		_dir = dir;

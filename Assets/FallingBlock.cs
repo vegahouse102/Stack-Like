@@ -11,6 +11,7 @@ public class FallingBlock : MonoBehaviour
 	{
 		transform.rotation = Quaternion.identity;
 		_rigid.linearVelocity = Vector3.zero;
+		_rigid.angularVelocity = Vector3.zero;
 
 	}
 
