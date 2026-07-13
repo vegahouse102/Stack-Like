@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,10 +24,7 @@ public class GameManager : MonoBehaviour
 	private Vector3 _startSize;
 	private Vector3 _startPos;
 
-	private bool _isGameStart;
-	private bool _isFinish;
-	private bool _isBlockExpand;
-
+	private bool _canClick;
 	[Header("Events")]
 	public UnityEvent OnGameOver;
 	public UnityEvent OnGameStart;
@@ -40,7 +38,7 @@ public class GameManager : MonoBehaviour
 
 	public void GameStart()
 	{
-		_isGameStart = true;
+		_canClick = true;
 		OnGameStart?.Invoke();
 		MakingMovingBlock();
 	}
@@ -48,27 +46,36 @@ public class GameManager : MonoBehaviour
 	public void ClickHandler()
 	{
 		// 1. 가드 클로즈: 현재 입력을 받으면 안 되는 예외 상황 필터링
-		if (_isFinish || !_isGameStart || _isBlockExpand)
+		if (!_canClick)
 			return;
+		_canClick = false;
 
-		_curBlock.Stop();
+
+		Sequence sequence = DOTween.Sequence();
+
+		sequence.AppendCallback( ()=>_curBlock.Stop());
 
 		// 2. 패배 조건 검사 (AABB 충돌 실패)
 		if (!IsAABB())
 		{
-			GameOver();
+			sequence.AppendCallback(()=>GameOver());
 			return;
 		}
 
 		// 3. 배치 성공 분기 (퍼펙트 vs 슬라이스)
 		if (IsPerfectPlace())
 		{
-			HandlePerfectPlace();
+			sequence.Append(HandlePerfectPlace());
 		}
 		else
 		{
-			HandleSlicedPlace();
+			sequence.AppendCallback(()=>HandleSlicedPlace());
 		}
+		sequence.AppendCallback(() =>
+		{
+			_canClick = true;
+
+		});
 	}
 
 	private bool IsPerfectPlace()
@@ -77,22 +84,29 @@ public class GameManager : MonoBehaviour
 		return Vector3.Distance(_curBlock.transform.position, _blockCenter) < _placementThreshold;
 	}
 
-	private void HandlePerfectPlace()
+	private Sequence HandlePerfectPlace()
 	{
+
+		Sequence sequence = DOTween.Sequence();
 		GameObject notFallingBlock = _makingMovingBlock.CreateCube(_notFallingBlock, _blockCenter, _blockSize);
 		_stackEffect.SetBoundEffect(_blockCenter, _blockSize);
 
 		// 맥스 콤보(스택) 달성 시 블록 확장 연출 페이즈 진입
 		if (_stackEffect.IsMaxStack())
 		{
-			StartBlockExpansion(notFallingBlock);
+			sequence.Append( StartBlockExpansion(notFallingBlock));
 		}
 		else
 		{
+			sequence.AppendCallback(() =>
+			{
+				OnBlockPlace?.Invoke(PlaceBlockType.Perfect);
+				EndPlaceBlock();
+			});
 			// 일반 퍼펙트인 경우 즉시 블록 배치 프로세스 종료
-			OnBlockPlace?.Invoke(PlaceBlockType.Perfect);
-			EndPlaceBlock();
+
 		}
+		return sequence;
 	}
 
 	private void HandleSlicedPlace()
@@ -104,13 +118,12 @@ public class GameManager : MonoBehaviour
 		EndPlaceBlock();
 	}
 
-	private void StartBlockExpansion(GameObject targetBlock)
+	private Sequence StartBlockExpansion(GameObject targetBlock)
 	{
 		ExpandBlock expand = targetBlock.GetComponent<ExpandBlock>();
-		if (expand == null) return;
+		if (expand == null) return DOTween.Sequence();
 
 		// 연출 상태 돌입 및 기존 무빙 블록 파괴
-		_isBlockExpand = true;
 		Destroy(_curBlock.gameObject);
 
 		// 현재 확장 축의 크기 및 최대 스케일 한도 계산
@@ -118,26 +131,31 @@ public class GameManager : MonoBehaviour
 		float maxAxisLength = _isXaxis ? _startSize.x : _startSize.z;
 		float expandLength = Mathf.Min(curAxisLength + _expandBlockLength, maxAxisLength) - curAxisLength;
 
+
+		Sequence sequence = DOTween.Sequence();
 		// 더 늘어날 공간이 있다면 확장 연출 비동기 콜백 실행
 		if (!Mathf.Approximately(expandLength, 0))
 		{
-			expand.OnExpandEnd += HandleExpandBlockEnd; // 콜백 등록
-			expand.Expand(_isXaxis, expandLength);
+			
+			sequence.Append( expand.Expand(_isXaxis, expandLength));
+			sequence.AppendCallback(()=>HandleExpandBlockEnd(expand.gameObject));
 		}
 		else
 		{
-			// 이미 최대 크기인 경우 연출 스킵하고 즉시 턴 종료
-			_isBlockExpand = false;
-			OnBlockPlace?.Invoke(PlaceBlockType.Perfect);
-			EndPlaceBlock();
+			sequence.AppendCallback(() =>
+			{
+				OnBlockPlace?.Invoke(PlaceBlockType.Perfect);
+				EndPlaceBlock();
+			});
+
 		}
+		return sequence ;
 	}
 
 	private void HandleExpandBlockEnd(GameObject expandObject)
 	{
 		// 안전장치: 연출이 완전히 끝났으므로 중복 실행 방지를 위해 이벤트 구독 해제(-=)
 		ExpandBlock expand = expandObject.GetComponent<ExpandBlock>();
-		if (expand != null) expand.OnExpandEnd -= HandleExpandBlockEnd;
 
 		// 확장이 완료된 최종 트랜스폼 데이터로 기준점 갱신
 		_blockCenter = expandObject.transform.position;
@@ -146,7 +164,6 @@ public class GameManager : MonoBehaviour
 		// 연출이 시각적으로 완벽히 끝난 시점에 이벤트를 터트리고 다음 턴 전환
 		OnBlockPlace?.Invoke(PlaceBlockType.Perfect);
 		EndPlaceBlock();
-		_isBlockExpand = false;
 	}
 
 	private void EndPlaceBlock()
@@ -164,7 +181,7 @@ public class GameManager : MonoBehaviour
 
 	private void GameOver()
 	{
-		_isFinish = true;
+		_canClick = false;
 		_makingMovingBlock.CreateCube(_fallingBlock, _curBlock.transform.position, _blockSize);
 		Destroy(_curBlock.gameObject);
 		OnGameOver?.Invoke();

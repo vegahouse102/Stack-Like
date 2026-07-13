@@ -493,7 +493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   _boundObj: {fileID: 4737411237259137611, guid: 834325a4fe64e284881edfc9cb427f3c, type: 3}
   _diff: 1.25
-  _maxStack: 8
+  _maxStack: 1
   _stackAudio: {fileID: 1078409499}
 --- !u!114 &98799949
 MonoBehaviour:

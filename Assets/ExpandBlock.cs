@@ -8,9 +8,8 @@ public class ExpandBlock : MonoBehaviour
 	private float _expandTime;
 	[SerializeField]
 	private AudioSource _audio;
-	public event Action<GameObject> OnExpandEnd;
 	
-	public void Expand(bool isXAxis,float maxLength)
+	public Sequence Expand(bool isXAxis,float maxLength)
 	{
 		Vector3 originPos = transform.position;
 		Vector3 originSize = transform.localScale;
@@ -48,6 +47,6 @@ public class ExpandBlock : MonoBehaviour
 		Sequence sequence = DOTween.Sequence();
 		sequence.Join( positionTween );
 		sequence.Join(sizeTween);
-		sequence.AppendCallback(()=>OnExpandEnd?.Invoke(gameObject));
+		return sequence;
 	}
 }
