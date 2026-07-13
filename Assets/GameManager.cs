@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
 	private bool CanExpandBlock(GameObject targetBlock, bool isXaxis,int dir)
 	{
 		float distance = GetDistanceMaxAxis(targetBlock, isXaxis, dir);
-		return distance > 0&&!Mathf.Approximately( distance , 0);
+		return distance > 0.01f;
 	}
 	private float GetDistanceMaxAxis(GameObject targetBlock,bool isXaxis,int dir)
 	{
